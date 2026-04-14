@@ -3,476 +3,903 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vabilo na zabavo - La Vita è Bella</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <title>Vabilo na zabavo — La Vita è Bella</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
     <style>
+        /* ========================================
+           DESIGN TOKENS
+           ======================================== */
         :root {
-            --modra: #2A54B5;
-            --rumena: #FBC314;
-            --bela: #FAF8F2;
-            --akvarel-pink: #EE76A0;
-            --akvarel-cyan: #A0D8D6;
-            --tekst: #333333;
+            --sun:        #F5B731;
+            --sun-light:  #FDE68A;
+            --sea:        #1B4B6B;
+            --sea-light:  #2A6F97;
+            --cream:      #FBF8F1;
+            --cream-warm: #F7F0E2;
+            --terracotta: #C65D3E;
+            --olive:      #5E7153;
+            --sand:       #E8DBC5;
+            --ink:        #1E1E1E;
+            --ink-soft:   #4A4A4A;
+            --white:      #FFFFFF;
+
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body:    'DM Sans', system-ui, sans-serif;
+            --font-accent:  'Cormorant Garamond', Georgia, serif;
+
+            --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+            --radius: 20px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ========================================
+           RESET & BASE
+           ======================================== */
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
 
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--bela);
-            color: var(--tekst);
+            font-family: var(--font-body);
+            background: var(--cream);
+            color: var(--ink);
             overflow-x: hidden;
-            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
         }
 
-        h1, h2, h3 {
-            font-family: 'Dancing Script', cursive;
-            color: var(--modra);
-            font-weight: 700;
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
         }
 
-        .fade-in {
+        /* ========================================
+           SCROLL ANIMATIONS
+           ======================================== */
+        .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 1s ease-out, transform 1s ease-out;
+            transform: translateY(32px);
+            transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
         }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
 
-        section {
-            min-height: 100vh;
+        /* ========================================
+           SECTION: HERO
+           ======================================== */
+        .hero {
+            min-height: 100svh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            padding: 2rem;
+            justify-content: center;
+            padding: 2rem 1.5rem;
             text-align: center;
-            position: relative; 
+            position: relative;
+            background: var(--cream);
+            overflow: hidden;
         }
 
-        .floating-element {
+        /* Subtle warm gradient overlay */
+        .hero::before {
+            content: '';
             position: absolute;
-            pointer-events: none; 
+            inset: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% 20%, rgba(245,183,49,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Thin decorative border */
+        .hero-border {
+            position: absolute;
+            inset: 12px;
+            border: 1.5px solid var(--sea);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .hero-sun {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 38%, #FFFDF0 0%, var(--sun-light) 30%, var(--sun) 65%, rgba(245,166,35,0.6) 100%);
+            box-shadow:
+                0 0 30px 10px rgba(253,230,138,0.35),
+                0 0 80px 30px rgba(245,183,49,0.12);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: sunIn 1.8s var(--ease-out) 0.2s forwards;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-sun::after {
+            content: '';
+            position: absolute; inset: -60%; border-radius: 50%;
+            background: radial-gradient(circle, rgba(253,230,138,0.08) 0%, transparent 60%);
+            animation: sunPulse 5s ease-in-out infinite;
+        }
+        @keyframes sunIn {
+            0%   { opacity: 0; transform: scale(0.4); filter: blur(6px); }
+            100% { opacity: 1; transform: scale(1); filter: blur(0); }
+        }
+        @keyframes sunPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50%      { transform: scale(1.15); opacity: 1; }
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.4rem, 9vw, 4.5rem);
+            font-weight: 700;
+            color: var(--sea);
+            line-height: 1.15;
+            margin-bottom: 1.2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-accent);
+            font-size: clamp(1rem, 3.5vw, 1.35rem);
+            font-weight: 400;
+            font-style: italic;
+            color: var(--ink-soft);
+            line-height: 1.7;
+            max-width: 360px;
+            margin: 0 auto 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tagline {
+            font-family: var(--font-accent);
+            font-size: clamp(0.95rem, 3vw, 1.15rem);
+            color: var(--terracotta);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Floating images on hero */
+        .hero-drink {
+            position: absolute;
+            top: 6%;
+            left: 4%;
+            max-width: clamp(60px, 16vw, 160px);
+            z-index: 3;
+            transform: rotate(-6deg);
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.12));
+            opacity: 0;
+            animation: floatIn 1.2s var(--ease-out) 1s forwards;
+        }
+        .hero-smile {
+            position: absolute;
+            top: 5%;
+            right: 4%;
+            max-width: clamp(60px, 15vw, 140px);
+            z-index: 3;
+            transform: rotate(4deg);
+            opacity: 0;
+            animation: floatIn 1.2s var(--ease-out) 1.2s forwards;
+        }
+        .hero-karikatura {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            max-width: clamp(120px, 38vw, 380px);
+            z-index: 4;
+            transform: rotate(-3deg);
+            opacity: 0;
+            animation: slideUp 1s var(--ease-out) 0.8s forwards;
+        }
+
+        @keyframes floatIn {
+            0%   { opacity: 0; transform: rotate(inherit) translateY(20px); }
+            100% { opacity: 1; transform: rotate(inherit) translateY(0); }
+        }
+        @keyframes slideUp {
+            0%   { opacity: 0; transform: rotate(-3deg) translateY(40px); }
+            100% { opacity: 1; transform: rotate(-3deg) translateY(0); }
+        }
+
+        /* ========================================
+           SECTION: KJE & KDAJ (Info)
+           ======================================== */
+        .info-section {
+            position: relative;
+            padding: 3.5rem 1.5rem;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: var(--sea);
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        /* Background images — sailboats & levem meja */
+        .info-bg-left {
+            position: absolute; top: 0; left: 0;
+            height: 100%; width: auto; max-width: 28%;
+            object-fit: cover; object-position: left center;
+            opacity: 0.2; z-index: 1;
+        }
+        .info-bg-right {
+            position: absolute; top: 0; right: 0;
+            height: 100%; width: auto; max-width: 45%;
+            object-fit: cover; object-position: right center;
+            opacity: 0.15; z-index: 1;
+        }
+
+        .info-content {
+            position: relative;
+            z-index: 5;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .info-section .section-label {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 1rem;
+        }
+
+        .info-heading {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 7vw, 3.2rem);
+            font-weight: 700;
+            color: var(--sun);
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            padding: 0.65rem 0;
+        }
+        .info-row:not(:last-child) {
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .info-row .label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.5);
+            min-width: 70px;
+            flex-shrink: 0;
+        }
+        .info-row .value {
+            font-family: var(--font-accent);
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+            font-weight: 400;
+            color: var(--white);
+        }
+
+        .info-cocktails {
+            max-width: 85%;
+            margin: 0 auto;
+            border-radius: 12px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .beach-sign-float {
+            position: absolute;
+            bottom: -1%;
+            left: 25%;
+            max-width: clamp(60px, 16vw, 160px);
+            z-index: 6;
+            transform: rotate(-5deg);
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+        }
+
+        /* ========================================
+           SECTION: DRESS CODE
+           ======================================== */
+        .dress-section {
+            position: relative;
+            padding: 3.5rem 1.5rem;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: var(--sun);
+            overflow: hidden;
+        }
+
+        .dress-content {
+            position: relative;
             z-index: 10;
         }
 
-        #kaj {
-            background-color: var(--bela);
-            border: 15px solid var(--modra);
-            overflow: hidden;
+        .dress-heading {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 8vw, 4rem);
+            font-weight: 700;
+            color: var(--white);
+            text-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 0.5rem;
         }
 
-        #kaj::before {
-            content: '';
+        .dress-desc {
+            font-family: var(--font-accent);
+            font-size: clamp(1rem, 3.5vw, 1.3rem);
+            font-weight: 400;
+            font-style: italic;
+            color: var(--sea);
+            max-width: 340px;
+            margin: 0 auto 2rem;
+        }
+
+        .color-swatches {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .swatch {
+            width: clamp(56px, 16vw, 80px);
+            height: clamp(56px, 16vw, 80px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: clamp(0.55rem, 1.8vw, 0.75rem);
+            letter-spacing: 0.03em;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            transition: transform 0.3s var(--ease-out);
+        }
+        .swatch:active { transform: scale(0.95); }
+        .swatch-yellow {
+            background: var(--sun);
+            color: var(--sea);
+            border: 2.5px solid var(--white);
+        }
+        .swatch-blue {
+            background: var(--sea);
+            color: var(--white);
+        }
+        .swatch-white {
+            background: var(--white);
+            color: var(--sea);
+        }
+
+        /* Decorative images */
+        .dress-disko {
             position: absolute;
-            inset: 0;
-            z-index: 0;
-            background: repeating-linear-gradient(
-                90deg,
-                transparent 0px, transparent 38px,
-                rgba(42,84,181,0.06) 38px, rgba(42,84,181,0.10) 42px,
-                transparent 42px, transparent 55px,
-                rgba(160,216,214,0.12) 55px, rgba(160,216,214,0.18) 60px,
-                transparent 60px, transparent 90px,
-                rgba(42,84,181,0.08) 90px, rgba(42,84,181,0.14) 93px,
-                transparent 93px, transparent 120px,
-                rgba(160,216,214,0.10) 120px, rgba(160,216,214,0.16) 126px,
-                transparent 126px, transparent 150px,
-                rgba(42,84,181,0.05) 150px, rgba(42,84,181,0.09) 153px,
-                transparent 153px, transparent 185px,
-                rgba(160,216,214,0.08) 185px, rgba(160,216,214,0.14) 189px,
-                transparent 189px, transparent 210px
-            );
-            filter: blur(1.5px);
+            top: 3%;
+            left: 4%;
+            max-width: clamp(60px, 18vw, 200px);
+            z-index: 5;
+            transform: rotate(-8deg);
+            opacity: 0.85;
         }
-
-        #kaj::after {
-            content: '';
+        .dress-poza {
             position: absolute;
-            inset: 0;
-            z-index: 0;
-            background: repeating-linear-gradient(
-                90deg,
-                transparent 0px, transparent 25px,
-                rgba(42,84,181,0.04) 25px, rgba(42,84,181,0.08) 28px,
-                transparent 28px, transparent 70px,
-                rgba(160,216,214,0.06) 70px, rgba(160,216,214,0.11) 74px,
-                transparent 74px, transparent 105px,
-                rgba(42,84,181,0.07) 105px, rgba(42,84,181,0.12) 109px,
-                transparent 109px, transparent 140px,
-                rgba(160,216,214,0.05) 140px, rgba(160,216,214,0.09) 143px,
-                transparent 143px, transparent 175px,
-                rgba(42,84,181,0.06) 175px, rgba(42,84,181,0.10) 178px,
-                transparent 178px, transparent 210px
-            );
-            filter: blur(2.5px);
-            opacity: 0.8;
+            top: -3%;
+            left: 20%;
+            max-width: clamp(140px, 55vw, 450px);
+            z-index: 12;
+            transform: rotate(-2deg);
         }
-
-        .sun-ambient {
+        .dress-fishes {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 1; pointer-events: none;
-            background: radial-gradient(ellipse 70% 60% at 50% 18%, rgba(253,222,120,0.18) 0%, rgba(251,195,20,0.06) 40%, transparent 70%);
-            opacity: 0; animation: ambientIn 3s ease-out 0.5s forwards;
+            bottom: 0;
+            right: -1%;
+            max-width: clamp(50px, 14vw, 150px);
+            z-index: 8;
+            transform: rotate(6deg);
+            filter: drop-shadow(0 3px 10px rgba(0,0,0,0.12));
         }
-        @keyframes ambientIn { to { opacity: 1; } }
-
-        .italian-sun {
-            position: relative; z-index: 5;
-            width: 160px; height: 160px; margin-bottom: 1.2rem; border-radius: 50%;
-            background: radial-gradient(circle at 45% 42%, #FFFDF0 0%, #FFF3C4 15%, #FDE68A 35%, #FBCB3C 55%, #F5A623 75%, rgba(232,148,26,0.6) 90%, transparent 100%);
-            box-shadow: 0 0 40px 15px rgba(253,230,138,0.5), 0 0 80px 40px rgba(251,195,20,0.2), 0 0 160px 80px rgba(251,195,20,0.08);
-            opacity: 0; transform: scale(0.3);
-            animation: sunRise 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
-        }
-        .italian-sun::before {
-            content: ''; position: absolute; top: 22%; left: 24%; width: 45%; height: 40%; border-radius: 50%;
-            background: radial-gradient(ellipse at 48% 45%, rgba(255,255,255,0.9) 0%, rgba(255,253,240,0.6) 40%, transparent 75%);
-        }
-        .italian-sun::after {
-            content: ''; position: absolute; top: 50%; left: 50%; width: 320%; height: 320%; border-radius: 50%;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(253,230,138,0.12) 0%, rgba(251,195,20,0.05) 35%, transparent 60%);
-            animation: hazeBreath 5s ease-in-out infinite;
-        }
-        @keyframes sunRise {
-            0%   { opacity: 0; transform: scale(0.3); filter: blur(8px); }
-            50%  { opacity: 0.8; filter: blur(2px); }
-            100% { opacity: 1; transform: scale(1); filter: blur(0px); }
-        }
-        @keyframes hazeBreath {
-            0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 0.7; }
-            50%      { transform: translate(-50%,-50%) scale(1.12); opacity: 1; }
+        .dress-ladies {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            max-width: clamp(60px, 18vw, 180px);
+            z-index: 8;
+            transform: rotate(-3deg);
+            filter: drop-shadow(0 3px 10px rgba(0,0,0,0.12));
         }
 
-        .sun-rays-long {
-            position: absolute; top: 18%; left: 50%; width: 200vmax; height: 200vmax;
-            transform: translate(-50%, -50%) scale(0); z-index: 1; pointer-events: none;
-            background: conic-gradient(from 0deg,transparent 0deg,rgba(253,222,120,0.06) 2deg,rgba(253,230,138,0.10) 5deg,rgba(253,222,120,0.05) 9deg,transparent 12deg,transparent 22deg,rgba(251,195,20,0.04) 24deg,rgba(253,230,138,0.08) 28deg,rgba(251,195,20,0.03) 32deg,transparent 35deg,transparent 48deg,rgba(253,222,120,0.07) 51deg,rgba(253,230,138,0.11) 55deg,rgba(253,222,120,0.05) 60deg,transparent 64deg,transparent 76deg,rgba(251,195,20,0.05) 79deg,rgba(253,230,138,0.09) 83deg,transparent 88deg,transparent 100deg,rgba(253,222,120,0.06) 103deg,rgba(253,230,138,0.10) 107deg,rgba(253,222,120,0.04) 112deg,transparent 116deg,transparent 130deg,rgba(251,195,20,0.05) 133deg,rgba(253,230,138,0.08) 137deg,transparent 142deg,transparent 155deg,rgba(253,222,120,0.07) 158deg,rgba(253,230,138,0.10) 162deg,rgba(253,222,120,0.05) 167deg,transparent 171deg,transparent 185deg,rgba(251,195,20,0.04) 188deg,rgba(253,230,138,0.08) 192deg,transparent 197deg,transparent 210deg,rgba(253,222,120,0.06) 213deg,rgba(253,230,138,0.10) 217deg,rgba(253,222,120,0.04) 222deg,transparent 226deg,transparent 240deg,rgba(251,195,20,0.05) 243deg,rgba(253,230,138,0.09) 247deg,transparent 252deg,transparent 265deg,rgba(253,222,120,0.06) 268deg,rgba(253,230,138,0.10) 272deg,rgba(253,222,120,0.05) 277deg,transparent 281deg,transparent 295deg,rgba(251,195,20,0.04) 298deg,rgba(253,230,138,0.08) 302deg,transparent 307deg,transparent 320deg,rgba(253,222,120,0.07) 323deg,rgba(253,230,138,0.10) 327deg,rgba(253,222,120,0.04) 332deg,transparent 336deg,transparent 350deg,rgba(251,195,20,0.05) 353deg,rgba(253,230,138,0.07) 357deg,transparent 360deg);
-            border-radius: 50%; filter: blur(3px);
-            animation: raysIn 3s ease-out 0.6s forwards, raysDrift 200s linear 3.5s infinite;
-            mask-image: radial-gradient(circle, transparent 1.5%, white 5%);
-            -webkit-mask-image: radial-gradient(circle, transparent 1.5%, white 5%);
-        }
-        .sun-rays-soft {
-            position: absolute; top: 18%; left: 50%; width: 180vmax; height: 180vmax;
-            transform: translate(-50%, -50%) scale(0); z-index: 1; pointer-events: none;
-            background: conic-gradient(from 8deg,transparent 0deg,rgba(253,230,138,0.05) 6deg,transparent 12deg,transparent 30deg,rgba(253,222,120,0.06) 35deg,transparent 40deg,transparent 60deg,rgba(253,230,138,0.05) 65deg,transparent 70deg,transparent 90deg,rgba(253,222,120,0.06) 95deg,transparent 100deg,transparent 120deg,rgba(253,230,138,0.05) 125deg,transparent 130deg,transparent 150deg,rgba(253,222,120,0.06) 155deg,transparent 160deg,transparent 180deg,rgba(253,230,138,0.05) 185deg,transparent 190deg,transparent 210deg,rgba(253,222,120,0.06) 215deg,transparent 220deg,transparent 240deg,rgba(253,230,138,0.05) 245deg,transparent 250deg,transparent 270deg,rgba(253,222,120,0.06) 275deg,transparent 280deg,transparent 300deg,rgba(253,230,138,0.05) 305deg,transparent 310deg,transparent 330deg,rgba(253,222,120,0.06) 335deg,transparent 340deg,transparent 360deg);
-            border-radius: 50%; filter: blur(5px); opacity: 0.6;
-            animation: raysIn 3.5s ease-out 1s forwards, raysDriftReverse 240s linear 4s infinite;
-            mask-image: radial-gradient(circle, transparent 2%, white 7%);
-            -webkit-mask-image: radial-gradient(circle, transparent 2%, white 7%);
-        }
-        @keyframes raysIn { 0% { opacity:0; transform:translate(-50%,-50%) scale(0.2); } 100% { opacity:1; transform:translate(-50%,-50%) scale(1); } }
-        @keyframes raysDrift { from { transform:translate(-50%,-50%) scale(1) rotate(0deg); } to { transform:translate(-50%,-50%) scale(1) rotate(360deg); } }
-        @keyframes raysDriftReverse { from { transform:translate(-50%,-50%) scale(1) rotate(0deg); } to { transform:translate(-50%,-50%) scale(1) rotate(-360deg); } }
-
-        /* 1. KAJ — HERO */
-        #kaj h1 { font-size: 4.5rem; margin-bottom: 0.8rem; line-height: 1.2; }
-        #kaj .subtitle { font-size: 1.3rem; color: var(--rumena); font-weight: 600; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 2px; }
-        #kaj .tagline { font-size: 1rem; font-weight: 300; max-width: 500px; line-height: 1.6; }
-      
-        #smile-element { max-width: 220px; top: 8%; right: 20%; transform: rotate(5deg); }
-        .karikatura-img { position: absolute; bottom: 0; right: 0; max-width: 500px; z-index: 25; transform: rotate(-4deg); }
-
-       
-        .drink-img {
-            position: absolute; top: 8%; left: 18%; max-width: 200px; z-index: 24;
-            transform: rotate(-8deg); filter: drop-shadow(0 6px 20px rgba(0,0,0,0.2));
-            opacity: 0; animation: floatUp 1.5s ease-out 1.5s forwards;
-        }
-
-        @keyframes floatUp {
-            0%   { opacity: 0; transform: rotate(inherit) translateY(30px); }
-            100% { opacity: 1; transform: rotate(inherit) translateY(0); }
-        }
-
-        /* 2. KJE IN KDAJ */
-        #kje-kdaj { background-color: var(--akvarel-cyan); color: var(--modra); overflow: hidden; }
-        #levem-meja { position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: 30%; object-fit: cover; object-position: left center; z-index: 5; }
-        #sailboats-element { position: absolute; top: 0; right: 0; height: 100%; width: auto; max-width: 50%; object-fit: cover; object-position: right center; z-index: 5; opacity: 0.8; }
-        #info-kdaj { position: relative;  z-index: 20; }
-        #kje-kdaj h2 { color: var(--rumena); font-size: 5rem; margin-bottom: 1.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
-        .info-box { font-size: 1.4rem; font-weight: 600; line-height: 1.8; max-width: 700px; margin-bottom: 2rem; color: var(--modra); text-shadow: 1px 1px 2px rgba(255,255,255,0.5); }
-        #cocktails-element { max-width: 100%; max-height: 340px; object-fit: cover; margin-top: 1rem; position: relative; z-index: 20; }
-
-        .beach-sign-img {
-            position: absolute; bottom: -1.7%; left: 32%; max-width: 220px; z-index: 15;
-            transform: rotate(-6deg); filter: drop-shadow(0 6px 15px rgba(0,0,0,0.15));
-        }
-
-        /* 3. DRESS CODE */
-        #dress-code { background-color: var(--rumena); color: var(--modra); }
-        #dress-code h2 { color: var(--bela); font-size: 4.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
-        .colors-container { display: flex; gap: 20px; margin-top: 2.5rem; flex-wrap: wrap; justify-content: center; position: relative; z-index: 20; }
-        .color-circle { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.2); font-size: 0.9rem; }
-        .c-rumena { background: var(--rumena); color: var(--modra); border: 3px solid var(--bela); }
-        .c-modra { background: var(--modra); color: var(--bela); }
-        .c-bela { background: var(--bela); color: var(--modra); }
-        #disko-element { max-width: 300px; top: 2%; left: 8%; transform: rotate(-10deg); z-index: 10; }
-     
-       
-
-        .poza-img {
-            position: absolute; max-width: 600px; top: -6%; left: 41%; z-index: 25; transform: rotate(-3deg);
-        }
-        .fishes-img {
-            position: absolute; bottom: -0.08%; right: -1%; max-width: 200px; z-index: 12;
-            transform: rotate(8deg); filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
-        }
-        .ladies-img {
-            position: absolute; bottom: 0%; left: 0%; max-width: 250px; z-index: 12;
-            transform: rotate(-5deg); filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
-        }
-
-        /* 4. AMALFI COAST */
-        #amalfi-break {
-            min-height: 80vh;
-            background: linear-gradient(170deg, #E8F4FD 0%, var(--bela) 40%, #FFF8E7 100%);
-            overflow: hidden;
-            border-top: 6px solid var(--modra);
-            border-bottom: 6px solid var(--modra);
+        /* ========================================
+           SECTION: AMALFI COAST
+           ======================================== */
+        .amalfi-section {
             position: relative;
+            padding: 3.5rem 1.5rem;
+            min-height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(175deg, #E8F1F8 0%, var(--cream) 50%, var(--cream-warm) 100%);
+            border-top: 1px solid rgba(27,75,107,0.1);
+            overflow: hidden;
         }
 
-        .amalfi-map-img {
-            max-width: 500px; width: 90%; margin-bottom: 2rem;
-            border-radius: 16px; box-shadow: 0 8px 30px rgba(42,84,181,0.15);
+        .amalfi-map {
+            max-width: min(420px, 85vw);
+            border-radius: var(--radius);
+            box-shadow: 0 8px 32px rgba(27,75,107,0.12);
+            margin-bottom: 2rem;
         }
 
-        .amalfi-text { position: relative; z-index: 20; max-width: 600px; }
-        .amalfi-text h2 { font-size: 3.5rem; margin-bottom: 1.5rem; color: var(--modra); }
-        .amalfi-text p { font-size: 1.15rem; line-height: 1.8; margin-bottom: 1rem; font-weight: 400; }
-        .amalfi-text .iban {
-            display: inline-block; background: var(--modra); color: var(--bela);
-            padding: 10px 24px; border-radius: 50px; font-weight: 600; font-size: 1.1rem; letter-spacing: 1px; margin: 1rem 0;
+        .amalfi-content {
+            max-width: 420px;
+            position: relative;
+            z-index: 5;
         }
-        .amalfi-text .sporocilo { font-style: italic; color: var(--modra); font-weight: 600; font-size: 1.05rem; }
+
+        .amalfi-heading {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 7vw, 3rem);
+            font-weight: 700;
+            color: var(--sea);
+            margin-bottom: 1rem;
+        }
+
+        .amalfi-text {
+            font-family: var(--font-body);
+            font-size: clamp(0.85rem, 2.8vw, 1rem);
+            line-height: 1.7;
+            color: var(--ink-soft);
+            margin-bottom: 1.5rem;
+        }
+
+        .amalfi-cta {
+            display: inline-block;
+            background: var(--sea);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+            padding: 12px 28px;
+            border-radius: 50px;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.6rem;
+        }
+
+        .amalfi-note {
+            font-family: var(--font-accent);
+            font-style: italic;
+            color: var(--sea);
+            font-size: clamp(0.85rem, 2.5vw, 1rem);
+        }
 
         .amalfi-video {
-            position: absolute; bottom: 5%; right: 5%; max-width: 800px;
-            z-index: 15; transform: rotate(-3deg); pointer-events: none;
+            position: absolute;
+            bottom: 3%;
+            right: 3%;
+            max-width: clamp(80px, 20vw, 220px);
+            z-index: 4;
+            transform: rotate(-2deg);
+            pointer-events: none;
+            opacity: 0.7;
         }
 
-        /* 5. RSVP */
-        #rsvp { background-color: var(--bela); overflow: hidden; position: relative; }
-        #rsvp h2 { font-size: 4.5rem; margin-bottom: 1rem; }
-        .buttons { display: flex; gap: 20px; margin-top: 2rem; flex-wrap: wrap; justify-content: center; position: relative; z-index: 20; }
-        button { padding: 15px 40px; font-size: 1.2rem; font-family: 'Montserrat', sans-serif; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; }
-        .btn-pridem { background-color: var(--modra); color: var(--bela); }
-        button:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-        #rsvp-form, #rsvp-message { display: none; margin-top: 2rem; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 400px; border: 2px solid var(--modra); position: relative; z-index: 20; }
-        .form-group { margin-bottom: 1.5rem; text-align: left; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--modra); }
-        .form-group input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
-        .checkbox-group { display: flex; align-items: center; gap: 10px; }
-        .btn-submit { width: 100%; background-color: var(--modra); color: white; margin-top: 1rem; }
-        #rsvp-message { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--modra); text-align: center; border: none; box-shadow: none; background: transparent; }
-
-        .lemon-tree-img {
-            position: absolute; bottom: 3%; right: 3%; max-width: 300px; z-index: 5;
-            transform: rotate(5deg); filter: drop-shadow(0 6px 15px rgba(0,0,0,0.15));
+        /* ========================================
+           SECTION: RSVP
+           ======================================== */
+        .rsvp-section {
+            position: relative;
+            padding: 3.5rem 1.5rem;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: var(--cream);
+            overflow: hidden;
         }
 
-        .terasa-img {
-            position: absolute; top: 0; left: 0; height: 100%; width: 35%;
-            object-fit: cover; z-index: 5; box-shadow: 10px 0 25px rgba(0,0,0,0.15);
+        .rsvp-bg-terasa {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            width: 30%;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0.35;
+            mask-image: linear-gradient(to right, black 40%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, black 40%, transparent 100%);
         }
 
-        /* =============================================
-           RESPONSIVE — DESKTOP
-           ============================================= */
+        .rsvp-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .rsvp-heading {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 7vw, 3.5rem);
+            font-weight: 700;
+            color: var(--sea);
+            margin-bottom: 0.5rem;
+        }
+
+        .rsvp-deadline {
+            font-family: var(--font-body);
+            font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+            color: var(--ink-soft);
+            margin-bottom: 0.3rem;
+        }
+
+        .rsvp-question {
+            font-family: var(--font-accent);
+            font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+            font-style: italic;
+            color: var(--terracotta);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Primary CTA button */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--sea);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: clamp(0.9rem, 2.8vw, 1.05rem);
+            padding: 14px 42px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.25s var(--ease-out), box-shadow 0.25s ease;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            z-index: 10;
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(27,75,107,0.25);
+        }
+
+        /* RSVP Form */
+        .rsvp-form {
+            display: none;
+            background: var(--white);
+            border: 1.5px solid rgba(27,75,107,0.12);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: left;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--sea);
+            margin-bottom: 0.4rem;
+        }
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid var(--sand);
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--ink);
+            background: var(--cream);
+            transition: border-color 0.2s ease;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .form-group input[type="text"]:focus {
+            border-color: var(--sea);
+        }
+        .form-group input[type="text"]::placeholder {
+            color: #B0A898;
+        }
+
+        /* Checkbox */
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0;
+        }
+        .checkbox-row input[type="checkbox"] {
+            width: 20px; height: 20px;
+            accent-color: var(--sea);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .checkbox-row label {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--ink);
+            cursor: pointer;
+            margin-bottom: 0 !important;
+        }
+
+        /* +1 additional fields */
+        .plus-one-fields {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--sand);
+        }
+        .plus-one-fields.active {
+            display: block;
+        }
+        .plus-one-label-note {
+            font-family: var(--font-accent);
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+            margin-bottom: 0.8rem;
+        }
+
+        .btn-submit {
+            width: 100%;
+            margin-top: 1.2rem;
+        }
+
+        /* Thank-you state */
+        .rsvp-thankyou {
+            display: none;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        .rsvp-thankyou h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            color: var(--sea);
+            margin-bottom: 0.5rem;
+        }
+        .rsvp-thankyou p {
+            font-family: var(--font-accent);
+            font-size: 1.1rem;
+            color: var(--ink-soft);
+            font-style: italic;
+        }
+
+        .rsvp-decline {
+            display: none;
+            margin-top: 1.5rem;
+        }
+        .rsvp-decline p {
+            font-family: var(--font-display);
+            font-size: clamp(1.4rem, 5vw, 2rem);
+            color: var(--sea);
+        }
+
+        /* Lemon tree */
+        .rsvp-lemon {
+            position: absolute;
+            bottom: 2%;
+            right: 2%;
+            max-width: clamp(80px, 18vw, 200px);
+            z-index: 3;
+            transform: rotate(4deg);
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+            opacity: 0.7;
+        }
+
+        /* ========================================
+           FOOTER — MINIMAL
+           ======================================== */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-family: var(--font-accent);
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+            opacity: 0.6;
+            background: var(--cream);
+        }
+
+        /* ========================================
+           RESPONSIVE — LARGER SCREENS
+           ======================================== */
+        @media (min-width: 768px) {
+            .hero { padding: 3rem 2rem; }
+            .hero-sun { width: 130px; height: 130px; }
+            .hero-drink { max-width: 180px; left: 12%; }
+            .hero-smile { max-width: 160px; right: 12%; }
+            .hero-karikatura { max-width: 420px; }
+
+            .info-section { padding: 4rem 2rem; }
+            .info-card { padding: 2rem; }
+            .info-cocktails { max-width: 400px; }
+
+            .dress-section { padding: 4rem 2rem; }
+
+            .amalfi-section { padding: 4rem 2rem; }
+
+            .rsvp-section { padding: 4rem 2rem; }
+            .rsvp-form { padding: 2rem; }
+        }
+
         @media (min-width: 1200px) {
-            #kaj h1 { font-size: 5.5rem; }
-            .italian-sun { width: 180px; height: 180px; }
-            .karikatura-img { max-width: 600px; }
-            
-            .drink-img { max-width: 240px; }
-     
-            .beach-sign-img { max-width: 260px; }
-            .poza-img { max-width: 700px; }
-            .ladies-img { max-width: 300px; }
-            .fishes-img { max-width: 240px; }
-            .amalfi-map-img { max-width: 550px; }
-            .amalfi-text h2 { font-size: 4rem; }
-            .amalfi-video { max-width: 700px; }
-            .lemon-tree-img { max-width: 300px; }
-            #kje-kdaj h2 { font-size: 5.5rem; }
-            #dress-code h2 { font-size: 5rem; }
-            #rsvp h2 { font-size: 5rem; }
-            #disko-element { max-width: 350px; }
-        }
-
-        /* =============================================
-           RESPONSIVE — TABLET
-           ============================================= */
-        @media (max-width: 1024px) and (min-width: 769px) {
-            .karikatura-img { max-width: 28vw; }
-            
-            .drink-img { max-width: 12vw; }
-            
-            .beach-sign-img { max-width: 12vw; }
-            .poza-img { max-width: 36vw; }
-            .ladies-img { max-width: 14vw; }
-            .fishes-img { max-width: 12vw; }
-            #disko-element { max-width: 18vw; }
-          
-            .amalfi-video { max-width: 16vw; }
-            .lemon-tree-img { max-width: 14vw; }
-            #smile-element { max-width: 12vw; }
-            
-            
-        }
-
-        /* =============================================
-           RESPONSIVE — MOBILE
-           ============================================= */
-        @media (max-width: 768px) {
-            section { min-height: 100svh; padding: 1.5rem; }
-
-            /* --- HERO (#kaj) --- */
-            #kaj h1 { font-size: clamp(2rem, 8vw, 4.5rem); }
-            #kaj .subtitle { font-size: clamp(0.7rem, 2.5vw, 1.3rem); letter-spacing: 1px; margin-bottom: 1rem; }
-            #kaj .tagline { font-size: clamp(0.7rem, 2.2vw, 1rem); }
-            .italian-sun { width: 22vw; height: 22vw; margin-bottom: 1rem; }
-            
-            
-            .drink-img { max-width: 14vw; }
-            .karikatura-img { max-width: 35vw; }
-            #smile-element { max-width: 14vw; top: 5%; right: 5%; }
-
-            /* --- KJE & KDAJ --- */
-            #kje-kdaj h2 { font-size: clamp(2rem, 8vw, 5rem); }
-            .info-box { font-size: clamp(0.8rem, 2.8vw, 1.4rem); }
-            #cocktails-element { max-height: 35vw; }
-            #levem-meja { max-width: 30%; opacity: 0.5; }
-            #sailboats-element { max-width: 50%; opacity: 0.5; }
-            
-            .beach-sign-img { max-width: 16vw; }
-
-            /* --- DRESS CODE --- */
-            #dress-code h2 { font-size: clamp(1.8rem, 7vw, 4.5rem); }
-            #dress-code .fade-in > p { font-size: clamp(0.8rem, 2.8vw, 1.4rem) !important; }
-            .color-circle { width: 14vw; height: 14vw; max-width: 80px; max-height: 80px; font-size: clamp(0.6rem, 2vw, 0.9rem); }
-            #disko-element { max-width: 22vw; }
-         
-          
-            /* FIX: top: auto resetira base top: -6%, da nov pravilno deluje */
-            .poza-img { max-width: 77vw; top: auto; top: -4%; left: 16%; }
-            .fishes-img { max-width: 14vw; }
-            .ladies-img { max-width: 18vw; }
-
-            /* --- AMALFI --- */
-            #amalfi-break { min-height: auto; padding: 2rem 1.5rem; }
-            .amalfi-map-img { max-width: 70vw; margin-bottom: 1.5rem; }
-            .amalfi-text h2 { font-size: clamp(1.5rem, 6vw, 3.5rem); }
-            .amalfi-text p { font-size: clamp(0.75rem, 2.5vw, 1.15rem); }
-            .amalfi-text .iban { font-size: clamp(0.7rem, 2.2vw, 1.1rem); padding: 1.5vw 4vw; }
-            .amalfi-video { max-width: 50vw; }
-
-            /* --- RSVP --- */
-            #rsvp h2 { font-size: clamp(2rem, 7vw, 4.5rem); }
-            #rsvp-form, #rsvp-message { max-width: 90%; padding: 1.5rem; }
-            #rsvp-message { font-size: clamp(1.3rem, 5vw, 2.5rem); }
-            button { padding: 2.5vw 6vw; font-size: clamp(0.8rem, 2.5vw, 1.2rem); }
-            .lemon-tree-img { max-width: 18vw; }
-            .terasa-img { width: 25%; }
-        }
-
-        /* =============================================
-           RESPONSIVE — MALI TELEFONI
-           ============================================= */
-        @media (max-width: 400px) {
-            .italian-sun { width: 20vw; height: 20vw; }
+            .hero-sun { width: 150px; height: 150px; }
+            .hero-drink { max-width: 200px; }
+            .hero-smile { max-width: 180px; }
+            .hero-karikatura { max-width: 500px; }
+            .info-bg-right { opacity: 0.25; }
         }
     </style>
 </head>
 <body>
 
-    <section id="kaj">
-        <div class="sun-ambient"></div>
-        <div class="sun-rays-long"></div>
-        <div class="sun-rays-soft"></div>
+    <!-- ==========================================
+         HERO — "Življenje je lepo"
+         ========================================== -->
+    <section class="hero">
+        <div class="hero-border"></div>
 
-        <div class="fade-in" style="z-index: 20; position: relative; display: flex; flex-direction: column; align-items: center;">
-            <div class="italian-sun"></div>
-            <h1>Življenje je lepo</h1>
-            <p class="subtitle">Eden jih je dopolnil lani, drugi jih bo dopolnil letos. <br />  Skupaj pa jih bova dopolnila 33. <br/>oba sva ZA</p>
-            <p class="subtitle">Praznujmo življenje, dobro družbo in nepozabne trenutke.</p>
-           
-        </div>
+        <img src="https://blazeking13.github.io/party/drink3.png" alt="Limoncello drink" class="hero-drink" onerror="this.style.display='none'">
+        <img src="https://blazeking13.github.io/party/image_2_transparent.png" alt="Smile" class="hero-smile" onerror="this.style.display='none'">
 
-        <img src="drink3.png" alt="Limoncello drink" class="drink-img fade-in" onerror="this.style.display='none'">
-        <img src="image_2_transparent.png" alt="Smile" class="floating-element" id="smile-element" onerror="this.style.display='none'">
-        <img src="karikatura_colored.png" alt="Karikatura" class="karikatura-img fade-in" onerror="this.style.display='none'">
+        <div class="hero-sun"></div>
+
+        <h1 class="hero-title reveal">Življenje je lepo</h1>
+
+        <p class="hero-subtitle reveal reveal-delay-1">
+            Eden jih je dopolnil lani, drugi jih bo dopolnil letos.<br>
+            Skupaj pa jih bova dopolnila 33.
+        </p>
+
+        <p class="hero-tagline reveal reveal-delay-2">
+            Praznujmo življenje, dobro družbo in nepozabne trenutke.
+        </p>
+
+        <img src="https://blazeking13.github.io/party/karikatura_colored.png" alt="Karikatura" class="hero-karikatura" onerror="this.style.display='none'">
     </section>
 
-    <section id="kje-kdaj">
-        <img src="image_3_transparent.png" alt="Levem Meja" class="floating-element" id="levem-meja" onerror="this.style.display='none'">
-        <img src="image_sailboats_scene.png" alt="Scena z jadrnicami" class="floating-element fade-in" id="sailboats-element" onerror="this.style.display='none'">
 
-        <img src="beach_sign.png" alt="Beach sign" class="beach-sign-img floating-element fade-in" onerror="this.style.display='none'">
-       
+    <!-- ==========================================
+         KJE & KDAJ — Event Info
+         ========================================== -->
+    <section class="info-section">
+        <img src="https://blazeking13.github.io/party/image_3_transparent.png" alt="Levem Meja" class="info-bg-left" onerror="this.style.display='none'">
+        <img src="https://blazeking13.github.io/party/image_sailboats_scene.png" alt="Jadrnice" class="info-bg-right reveal" onerror="this.style.display='none'">
 
-        <div id="info-kdaj" class="fade-in">
-            <h2>Lepo vabljeni <br/>na najino skupno praznovanje!</h2>
-            <div class="info-box">
-                <p><strong>Lokacija:</strong> NOE Wine & Bar Restaurant, Volčja Draga 34d</p>
-                <p><strong>Datum:</strong> sobota, 26. september 2026</p>
-                <p><strong>Ura:</strong> ob 18h</p>
+        <div class="info-content">
+            <p class="section-label reveal">Vabilo</p>
+
+            <h2 class="info-heading reveal reveal-delay-1">
+                Lepo vabljeni<br>na najino skupno praznovanje!
+            </h2>
+
+            <div class="info-card reveal reveal-delay-2">
+                <div class="info-row">
+                    <span class="label">Lokacija</span>
+                    <span class="value">NOE Wine & Bar Restaurant, Volčja Draga 34d</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Datum</span>
+                    <span class="value">Sobota, 26. september 2026</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Ura</span>
+                    <span class="value">ob 18h</span>
+                </div>
             </div>
-            <img src="image_cocktails.png" alt="Koktajli in nazdravljanje" id="cocktails-element" onerror="this.style.display='none'">
+
+            <img src="https://blazeking13.github.io/party/image_cocktails.png" alt="Koktajli" class="info-cocktails reveal reveal-delay-3" onerror="this.style.display='none'">
         </div>
+
+        <img src="https://blazeking13.github.io/party/beach_sign.png" alt="Beach sign" class="beach-sign-float reveal" onerror="this.style.display='none'">
     </section>
 
-    <section id="dress-code">
-        <div class="fade-in" style="z-index: 20; position: relative;">
-            <h2>Dress Code</h2>
-            <p style="font-size: 1.4rem; max-width: 600px; margin: 0 auto; font-weight: 600;">
-                Sproščeno, casual, 50 oddtenkov ;)
+
+    <!-- ==========================================
+         DRESS CODE
+         ========================================== -->
+    <section class="dress-section">
+        <img src="https://blazeking13.github.io/party/image_4_transparent.png" alt="Disko Krogla" class="dress-disko reveal" onerror="this.style.display='none'">
+        <img src="https://blazeking13.github.io/party/poza_srcek.png" alt="Poza" class="dress-poza reveal" onerror="this.style.display='none'">
+
+        <div class="dress-content reveal">
+            <h2 class="dress-heading">Dress Code</h2>
+            <p class="dress-desc">Sproščeno, casual, 50 odtenkov ;)</p>
+
+            <div class="color-swatches">
+                <div class="swatch swatch-yellow">Rumena</div>
+                <div class="swatch swatch-blue">Modra</div>
+                <div class="swatch swatch-white">Bela</div>
+            </div>
+        </div>
+
+        <img src="https://blazeking13.github.io/party/fishes.png" alt="Ribice" class="dress-fishes reveal" onerror="this.style.display='none'">
+        <img src="https://blazeking13.github.io/party/ladies.png" alt="Poletne dame" class="dress-ladies reveal" onerror="this.style.display='none'">
+    </section>
+
+
+    <!-- ==========================================
+         AMALFI COAST — Gift section
+         ========================================== -->
+    <section class="amalfi-section">
+        <div class="amalfi-content">
+            <img src="https://blazeking13.github.io/party/Amalfi_Coast.png" alt="Amalfi Coast zemljevid" class="amalfi-map reveal">
+
+            <h2 class="amalfi-heading reveal reveal-delay-1">Amalfi Coast</h2>
+
+            <p class="amalfi-text reveal reveal-delay-2">
+                Zbirava prispevke za najin izlet čez Amalfi Coast v Italiji.
+                Ni si vam treba belit glave z darilom, prispevkov bova zelo zadovoljna :)
             </p>
-            <div class="colors-container">
-                <div class="color-circle c-rumena">Rumena</div>
-                <div class="color-circle c-modra">Modra</div>
-                <div class="color-circle c-bela">Bela</div>
+
+            <div class="reveal reveal-delay-3">
+                <span class="amalfi-cta">+386 51 360 560</span>
+                <p class="amalfi-note">S pripisom "Amalfi coast"</p>
             </div>
         </div>
-        <img src="image_4_transparent.png" alt="Disko Krogla" class="floating-element" id="disko-element" onerror="this.style.display='none'">
-     
-        
 
-        <img src="poza_srcek.png" alt="Poza" class="poza-img fade-in" onerror="this.style.display='none'">
-        <img src="fishes.png" alt="Ribice" class="fishes-img floating-element fade-in" onerror="this.style.display='none'">
-        <img src="ladies.png" alt="Poletne dame" class="ladies-img floating-element fade-in" onerror="this.style.display='none'">
+        <video src="https://blazeking13.github.io/party/animacija.mp4" class="amalfi-video reveal" autoplay loop muted playsinline></video>
     </section>
 
-    <section id="amalfi-break">
-        <div class="fade-in" style="z-index: 20; position: relative; display: flex; flex-direction: column; align-items: center;">
-            <img src="Amalfi_Coast.png" alt="Amalfi Coast zemljevid" class="amalfi-map-img">
 
-            <div class="amalfi-text">
-                <h2>Amalfi Coast</h2>
-                <p>Zbirava prispevke za najin izlet čez Amalfi Coast v Italiji. Ni si vam treba belit glave z darilom, prispevkov bova zelo zadovoljna :)</p>
-                <span class="iban">Fliknite na +386 51 360 560</span>
-                <p class="sporocilo">S pripisom "Amalfi coast"</p>
-            </div>
-        </div>
-        
-        <video src="animacija.mp4" class="amalfi-video fade-in" autoplay loop muted playsinline></video>
-    </section>
+    <!-- ==========================================
+         RSVP
+         ========================================== -->
+    <section class="rsvp-section">
+        <img src="https://blazeking13.github.io/party/terasa.jpg" alt="Terasa" class="rsvp-bg-terasa" onerror="this.style.display='none'">
 
-    <section id="rsvp">
-        <img src="terasa.jpg" alt="Terasa" class="terasa-img fade-in" onerror="this.style.display='none'">
-        <div class="fade-in" style="z-index: 20; position: relative;">
-            <h2>Tvoja prisotnost</h2>
-            <p style="font-size: 1.4rem;">Prosim za potrditev udeležbe, najkasneje do 31. 7. 2026.</p>
-			<p style="font-size: 1.4rem;">Prideš?</p>
-            <div class="buttons" id="rsvp-buttons">
-                <button class="btn-pridem" onclick="showForm()">Pridem!</button>
+        <div class="rsvp-content">
+            <h2 class="rsvp-heading reveal">Tvoja prisotnost</h2>
+            <p class="rsvp-deadline reveal reveal-delay-1">Prosim za potrditev udeležbe, najkasneje do 31. 7. 2026.</p>
+            <p class="rsvp-question reveal reveal-delay-2">Prideš?</p>
+
+            <div id="rsvp-buttons" class="reveal reveal-delay-3">
+                <button class="btn-primary" onclick="showForm()">Pridem!</button>
             </div>
-            <div id="rsvp-form">
+
+            <!-- Form -->
+            <div class="rsvp-form" id="rsvp-form">
                 <div class="form-group">
                     <label for="ime">Ime</label>
                     <input type="text" id="ime" placeholder="Tvoje ime">
@@ -481,41 +908,121 @@
                     <label for="priimek">Priimek</label>
                     <input type="text" id="priimek" placeholder="Tvoj priimek">
                 </div>
-                <div class="form-group checkbox-group">
-                    <input type="checkbox" id="plus-ena">
-                    <label for="plus-ena" style="margin-bottom: 0;">Pridem s +1</label>
+                <div class="form-group">
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="plus-ena" onchange="togglePlusOne()">
+                        <label for="plus-ena">Pridem s +1</label>
+                    </div>
                 </div>
-                <button class="btn-submit" onclick="submitForm()">Potrdi prihod</button>
+
+                <!-- +1 fields -->
+                <div class="plus-one-fields" id="plus-one-fields">
+                    <p class="plus-one-label-note">Podatki spremljevalca</p>
+                    <div class="form-group">
+                        <label for="plus-ime">Ime</label>
+                        <input type="text" id="plus-ime" placeholder="Ime spremljevalca">
+                    </div>
+                    <div class="form-group">
+                        <label for="plus-priimek">Priimek</label>
+                        <input type="text" id="plus-priimek" placeholder="Priimek spremljevalca">
+                    </div>
+                </div>
+
+                <button class="btn-primary btn-submit" onclick="submitForm()">Potrdi prihod</button>
             </div>
-            <div id="rsvp-message">Škoda. Pa naslednjič :)</div>
+
+            <!-- Thank you -->
+            <div class="rsvp-thankyou" id="rsvp-thankyou"></div>
+
+            <!-- Decline -->
+            <div class="rsvp-decline" id="rsvp-decline">
+                <p>Škoda. Pa naslednjič :)</p>
+            </div>
         </div>
 
-        <img src="lemon_tree.png" alt="Limonovo drevo" class="lemon-tree-img floating-element fade-in" onerror="this.style.display='none'">
+        <img src="https://blazeking13.github.io/party/lemon_tree.png" alt="Limonovo drevo" class="rsvp-lemon reveal" onerror="this.style.display='none'">
     </section>
 
+    <footer class="footer">La Vita è Bella · 2026</footer>
+
+
+    <!-- ==========================================
+         SCRIPTS
+         ========================================== -->
     <script>
+        /* --- Scroll Reveal --- */
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
             });
-        }, { threshold: 0.15 });
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        const buttonsContainer = document.getElementById('rsvp-buttons');
-        const rsvpForm = document.getElementById('rsvp-form');
-        const rsvpMessage = document.getElementById('rsvp-message');
+        /* --- RSVP Logic --- */
+        const buttonsEl   = document.getElementById('rsvp-buttons');
+        const formEl      = document.getElementById('rsvp-form');
+        const thankyouEl  = document.getElementById('rsvp-thankyou');
+        const declineEl   = document.getElementById('rsvp-decline');
+        const plusFields   = document.getElementById('plus-one-fields');
 
         function showForm() {
-            buttonsContainer.style.display = 'none';
-            rsvpForm.style.display = 'block';
-            rsvpMessage.style.display = 'none';
-            rsvpForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            buttonsEl.style.display = 'none';
+            formEl.style.display = 'block';
+            declineEl.style.display = 'none';
+            setTimeout(() => {
+                formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
         }
+
+        function togglePlusOne() {
+            const checked = document.getElementById('plus-ena').checked;
+            plusFields.classList.toggle('active', checked);
+            if (!checked) {
+                document.getElementById('plus-ime').value = '';
+                document.getElementById('plus-priimek').value = '';
+            }
+        }
+
         function submitForm() {
-            const ime = document.getElementById('ime').value;
-            if(!ime) { alert('Prosim, vpiši vsaj svoje ime.'); return; }
-            rsvpForm.innerHTML = `<h3 style="margin-bottom: 1rem;">Hvala, ${ime}!</h3><p>Tvoja prijava je zabeležena. Se vidimo!</p>`;
+            const ime     = document.getElementById('ime').value.trim();
+            const priimek = document.getElementById('priimek').value.trim();
+
+            if (!ime) {
+                alert('Prosim, vpiši vsaj svoje ime.');
+                return;
+            }
+
+            const plusChecked = document.getElementById('plus-ena').checked;
+            if (plusChecked) {
+                const plusIme = document.getElementById('plus-ime').value.trim();
+                if (!plusIme) {
+                    alert('Prosim, vpiši ime spremljevalca.');
+                    return;
+                }
+            }
+
+            // Gather data for future Google Sheets integration
+            const data = {
+                ime: ime,
+                priimek: priimek,
+                plusOne: plusChecked,
+                plusIme: plusChecked ? document.getElementById('plus-ime').value.trim() : '',
+                plusPriimek: plusChecked ? document.getElementById('plus-priimek').value.trim() : ''
+            };
+            console.log('RSVP Data:', data);
+
+            // Show thank you
+            formEl.style.display = 'none';
+            thankyouEl.style.display = 'block';
+            thankyouEl.innerHTML = `
+                <h3>Hvala, ${ime}!</h3>
+                <p>Tvoja prijava je zabeležena. Se vidimo! 🥂</p>
+            `;
+            thankyouEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     </script>
+
 </body>
 </html>
