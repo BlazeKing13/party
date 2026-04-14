@@ -8,9 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* ========================================
-           DESIGN TOKENS
-           ======================================== */
         :root {
             --sun:        #F5B731;
             --sun-light:  #FDE68A;
@@ -33,18 +30,8 @@
             --radius: 20px;
         }
 
-        /* ========================================
-           RESET & BASE
-           ======================================== */
-        *, *::before, *::after {
-            margin: 0; padding: 0; box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%;
-        }
-
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
         body {
             font-family: var(--font-body);
             background: var(--cream);
@@ -52,170 +39,147 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
+        img { max-width: 100%; height: auto; display: block; }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        /* ========================================
-           SCROLL ANIMATIONS
-           ======================================== */
         .reveal {
             opacity: 0;
-            transform: translateY(32px);
+            transform: translateY(28px);
             transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
         }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-d1 { transition-delay: 0.1s; }
+        .reveal-d2 { transition-delay: 0.2s; }
+        .reveal-d3 { transition-delay: 0.3s; }
+        .reveal-d4 { transition-delay: 0.4s; }
 
-        /* ========================================
-           SECTION: HERO
-           ======================================== */
+        /* ===== HERO ===== */
         .hero {
             min-height: 100svh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 2rem 1.5rem;
+            justify-content: flex-start;
+            padding: 3rem 1.5rem 0;
             text-align: center;
             position: relative;
             background: var(--cream);
             overflow: hidden;
         }
-
-        /* Subtle warm gradient overlay */
         .hero::before {
             content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse 80% 50% at 50% 20%, rgba(245,183,49,0.08) 0%, transparent 70%);
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% 15%, rgba(245,183,49,0.07) 0%, transparent 70%);
             pointer-events: none;
         }
-
-        /* Thin decorative border */
         .hero-border {
-            position: absolute;
-            inset: 12px;
+            position: absolute; inset: 10px;
             border: 1.5px solid var(--sea);
-            opacity: 0.15;
+            opacity: 0.12;
             pointer-events: none;
         }
-
-        .hero-sun {
-            width: 100px; height: 100px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 40% 38%, #FFFDF0 0%, var(--sun-light) 30%, var(--sun) 65%, rgba(245,166,35,0.6) 100%);
-            box-shadow:
-                0 0 30px 10px rgba(253,230,138,0.35),
-                0 0 80px 30px rgba(245,183,49,0.12);
-            margin-bottom: 1.5rem;
+        .hero-sun-wrap {
+            width: 140px; height: 140px;
+            position: relative; z-index: 2;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
             opacity: 0;
             animation: sunIn 1.8s var(--ease-out) 0.2s forwards;
-            position: relative;
-            z-index: 2;
         }
-        .hero-sun::after {
-            content: '';
-            position: absolute; inset: -60%; border-radius: 50%;
-            background: radial-gradient(circle, rgba(253,230,138,0.08) 0%, transparent 60%);
+        .hero-sun-wrap svg {
+            width: 100%; height: 100%;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(253,230,138,0.4)) drop-shadow(0 0 50px rgba(245,183,49,0.15));
+        }
+        .hero-sun-wrap .sun-rays {
+            transform-origin: center;
+            animation: raysRotate 60s linear infinite;
+        }
+        .hero-sun-wrap .sun-glow {
+            position: absolute; inset: -50%; border-radius: 50%;
+            background: radial-gradient(circle, rgba(253,230,138,0.08) 0%, transparent 55%);
             animation: sunPulse 5s ease-in-out infinite;
+            pointer-events: none;
         }
         @keyframes sunIn {
             0%   { opacity: 0; transform: scale(0.4); filter: blur(6px); }
             100% { opacity: 1; transform: scale(1); filter: blur(0); }
         }
         @keyframes sunPulse {
-            0%, 100% { transform: scale(1); opacity: 0.6; }
+            0%, 100% { transform: scale(1); opacity: 0.5; }
             50%      { transform: scale(1.15); opacity: 1; }
         }
-
+        @keyframes raysRotate {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
         .hero-title {
             font-family: var(--font-display);
-            font-size: clamp(2.4rem, 9vw, 4.5rem);
+            font-size: clamp(2.2rem, 9vw, 4.5rem);
             font-weight: 700;
             color: var(--sea);
             line-height: 1.15;
-            margin-bottom: 1.2rem;
-            position: relative;
-            z-index: 2;
+            margin-bottom: 1rem;
+            position: relative; z-index: 2;
         }
-
         .hero-subtitle {
             font-family: var(--font-accent);
-            font-size: clamp(1rem, 3.5vw, 1.35rem);
+            font-size: clamp(1rem, 3.5vw, 1.3rem);
             font-weight: 400;
             font-style: italic;
             color: var(--ink-soft);
             line-height: 1.7;
-            max-width: 360px;
-            margin: 0 auto 1rem;
-            position: relative;
-            z-index: 2;
+            max-width: 340px;
+            margin: 0 auto 0.8rem;
+            position: relative; z-index: 2;
         }
-
         .hero-tagline {
             font-family: var(--font-accent);
-            font-size: clamp(0.95rem, 3vw, 1.15rem);
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
             color: var(--terracotta);
             font-weight: 600;
             letter-spacing: 0.02em;
-            position: relative;
-            z-index: 2;
+            position: relative; z-index: 2;
+            margin-bottom: 1rem;
         }
-
-        /* Floating images on hero */
         .hero-drink {
-            position: absolute;
-            top: 6%;
-            left: 4%;
-            max-width: clamp(60px, 16vw, 160px);
+            position: absolute; top: 2%; left: 3%;
+            width: clamp(55px, 14vw, 130px);
             z-index: 3;
             transform: rotate(-6deg);
-            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.12));
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.1));
             opacity: 0;
-            animation: floatIn 1.2s var(--ease-out) 1s forwards;
+            animation: fadeSlideIn 1s var(--ease-out) 1s forwards;
         }
         .hero-smile {
-            position: absolute;
-            top: 5%;
-            right: 4%;
-            max-width: clamp(60px, 15vw, 140px);
+            position: absolute; top: 2%; right: 3%;
+            width: clamp(55px, 14vw, 120px);
             z-index: 3;
             transform: rotate(4deg);
             opacity: 0;
-            animation: floatIn 1.2s var(--ease-out) 1.2s forwards;
+            animation: fadeSlideIn 1s var(--ease-out) 1.2s forwards;
+        }
+        .hero-karikatura-wrap {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            position: relative; z-index: 4;
         }
         .hero-karikatura {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            max-width: clamp(120px, 38vw, 380px);
-            z-index: 4;
-            transform: rotate(-3deg);
+            width: clamp(200px, 65vw, 400px);
             opacity: 0;
-            animation: slideUp 1s var(--ease-out) 0.8s forwards;
+            animation: slideUpIn 1s var(--ease-out) 0.7s forwards;
+        }
+        @keyframes fadeSlideIn {
+            0%   { opacity: 0; transform: translateY(16px) rotate(inherit); }
+            100% { opacity: 1; transform: translateY(0) rotate(inherit); }
+        }
+        @keyframes slideUpIn {
+            0%   { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes floatIn {
-            0%   { opacity: 0; transform: rotate(inherit) translateY(20px); }
-            100% { opacity: 1; transform: rotate(inherit) translateY(0); }
-        }
-        @keyframes slideUp {
-            0%   { opacity: 0; transform: rotate(-3deg) translateY(40px); }
-            100% { opacity: 1; transform: rotate(-3deg) translateY(0); }
-        }
-
-        /* ========================================
-           SECTION: KJE & KDAJ (Info)
-           ======================================== */
+        /* ===== INFO ===== */
         .info-section {
             position: relative;
             padding: 3.5rem 1.5rem;
@@ -229,74 +193,65 @@
             color: var(--white);
             overflow: hidden;
         }
-
-        /* Background images — sailboats & levem meja */
         .info-bg-left {
             position: absolute; top: 0; left: 0;
-            height: 100%; width: auto; max-width: 28%;
+            height: 100%; width: auto; max-width: 30%;
             object-fit: cover; object-position: left center;
-            opacity: 0.2; z-index: 1;
+            opacity: 0.1; z-index: 1;
         }
         .info-bg-right {
             position: absolute; top: 0; right: 0;
-            height: 100%; width: auto; max-width: 45%;
+            height: 100%; width: auto; max-width: 40%;
             object-fit: cover; object-position: right center;
-            opacity: 0.15; z-index: 1;
+            opacity: 0.08; z-index: 1;
         }
-
         .info-content {
-            position: relative;
-            z-index: 5;
-            max-width: 500px;
-            width: 100%;
+            position: relative; z-index: 5;
+            max-width: 440px; width: 100%;
         }
-
-        .info-section .section-label {
+        .section-label {
             font-family: var(--font-body);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 600;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.5);
-            margin-bottom: 1rem;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 1.2rem;
         }
-
         .info-heading {
             font-family: var(--font-display);
-            font-size: clamp(1.8rem, 7vw, 3.2rem);
+            font-size: clamp(1.7rem, 6.5vw, 3rem);
             font-weight: 700;
             color: var(--sun);
-            line-height: 1.2;
+            line-height: 1.25;
             margin-bottom: 2rem;
         }
-
         .info-card {
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: var(--radius);
-            padding: 1.5rem;
+            padding: 1.25rem 1.4rem;
             margin-bottom: 2rem;
             text-align: left;
         }
-
         .info-row {
             display: flex;
             align-items: baseline;
-            gap: 0.6rem;
-            padding: 0.65rem 0;
+            gap: 0.75rem;
+            padding: 0.7rem 0;
         }
         .info-row:not(:last-child) {
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
         }
         .info-row .label {
-            font-size: 0.7rem;
+            font-size: 0.62rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: rgba(255,255,255,0.5);
-            min-width: 70px;
+            letter-spacing: 0.12em;
+            color: rgba(255,255,255,0.45);
+            min-width: 65px;
             flex-shrink: 0;
         }
         .info-row .value {
@@ -304,29 +259,24 @@
             font-size: clamp(1rem, 3.5vw, 1.2rem);
             font-weight: 400;
             color: var(--white);
+            line-height: 1.4;
         }
-
         .info-cocktails {
-            max-width: 85%;
+            max-width: 80%;
             margin: 0 auto;
             border-radius: 12px;
-            position: relative;
-            z-index: 5;
+            position: relative; z-index: 5;
         }
-
         .beach-sign-float {
             position: absolute;
-            bottom: -1%;
-            left: 25%;
-            max-width: clamp(60px, 16vw, 160px);
+            bottom: 2%; left: 20%;
+            width: clamp(55px, 14vw, 140px);
             z-index: 6;
             transform: rotate(-5deg);
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
         }
 
-        /* ========================================
-           SECTION: DRESS CODE
-           ======================================== */
+        /* ===== DRESS CODE ===== */
         .dress-section {
             position: relative;
             padding: 3.5rem 1.5rem;
@@ -339,141 +289,103 @@
             background: var(--sun);
             overflow: hidden;
         }
-
-        .dress-content {
-            position: relative;
-            z-index: 10;
-        }
-
+        .dress-content { position: relative; z-index: 10; }
         .dress-heading {
             font-family: var(--font-display);
             font-size: clamp(2.2rem, 8vw, 4rem);
             font-weight: 700;
             color: var(--white);
-            text-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            margin-bottom: 0.4rem;
         }
-
         .dress-desc {
             font-family: var(--font-accent);
-            font-size: clamp(1rem, 3.5vw, 1.3rem);
+            font-size: clamp(1rem, 3.5vw, 1.25rem);
             font-weight: 400;
             font-style: italic;
             color: var(--sea);
-            max-width: 340px;
+            max-width: 320px;
             margin: 0 auto 2rem;
         }
-
         .color-swatches {
             display: flex;
             gap: 14px;
             justify-content: center;
-            align-items: center;
         }
-
         .swatch {
-            width: clamp(56px, 16vw, 80px);
-            height: clamp(56px, 16vw, 80px);
+            width: clamp(60px, 17vw, 80px);
+            height: clamp(60px, 17vw, 80px);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: var(--font-body);
             font-weight: 600;
-            font-size: clamp(0.55rem, 1.8vw, 0.75rem);
-            letter-spacing: 0.03em;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-            transition: transform 0.3s var(--ease-out);
+            font-size: clamp(0.55rem, 1.8vw, 0.72rem);
+            letter-spacing: 0.04em;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
         }
-        .swatch:active { transform: scale(0.95); }
-        .swatch-yellow {
-            background: var(--sun);
-            color: var(--sea);
-            border: 2.5px solid var(--white);
-        }
-        .swatch-blue {
-            background: var(--sea);
-            color: var(--white);
-        }
-        .swatch-white {
-            background: var(--white);
-            color: var(--sea);
-        }
-
-        /* Decorative images */
+        .sw-yellow { background: var(--sun); color: var(--sea); border: 2.5px solid var(--white); }
+        .sw-blue   { background: var(--sea); color: var(--white); }
+        .sw-white  { background: var(--white); color: var(--sea); }
         .dress-disko {
-            position: absolute;
-            top: 3%;
-            left: 4%;
-            max-width: clamp(60px, 18vw, 200px);
+            position: absolute; top: 4%; left: 3%;
+            width: clamp(50px, 14vw, 140px);
             z-index: 5;
             transform: rotate(-8deg);
-            opacity: 0.85;
+            opacity: 0.8;
         }
         .dress-poza {
             position: absolute;
-            top: -3%;
-            left: 20%;
-            max-width: clamp(140px, 55vw, 450px);
+            top: -3%; left: 50%;
+            transform: translateX(-50%) rotate(-1deg);
+            width: clamp(220px, 72vw, 480px);
             z-index: 12;
-            transform: rotate(-2deg);
         }
         .dress-fishes {
-            position: absolute;
-            bottom: 0;
-            right: -1%;
-            max-width: clamp(50px, 14vw, 150px);
+            position: absolute; bottom: 1%; right: 0;
+            width: clamp(45px, 12vw, 120px);
             z-index: 8;
             transform: rotate(6deg);
-            filter: drop-shadow(0 3px 10px rgba(0,0,0,0.12));
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.1));
         }
         .dress-ladies {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            max-width: clamp(60px, 18vw, 180px);
+            position: absolute; bottom: 0; left: 0;
+            width: clamp(55px, 16vw, 160px);
             z-index: 8;
             transform: rotate(-3deg);
-            filter: drop-shadow(0 3px 10px rgba(0,0,0,0.12));
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.1));
         }
 
-        /* ========================================
-           SECTION: AMALFI COAST
-           ======================================== */
+        /* ===== AMALFI ===== */
         .amalfi-section {
             position: relative;
-            padding: 3.5rem 1.5rem;
-            min-height: auto;
+            padding: 3rem 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            background: linear-gradient(175deg, #E8F1F8 0%, var(--cream) 50%, var(--cream-warm) 100%);
-            border-top: 1px solid rgba(27,75,107,0.1);
+            background: linear-gradient(175deg, #E8F1F8 0%, var(--cream) 45%, var(--cream-warm) 100%);
+            border-top: 1px solid rgba(27,75,107,0.08);
             overflow: hidden;
         }
-
-        .amalfi-map {
-            max-width: min(420px, 85vw);
-            border-radius: var(--radius);
-            box-shadow: 0 8px 32px rgba(27,75,107,0.12);
-            margin-bottom: 2rem;
-        }
-
         .amalfi-content {
-            max-width: 420px;
-            position: relative;
-            z-index: 5;
+            max-width: 420px; width: 100%;
+            position: relative; z-index: 5;
         }
-
+        .amalfi-map {
+            width: 92%; max-width: 400px;
+            margin: 0 auto 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: 0 8px 28px rgba(27,75,107,0.1);
+        }
         .amalfi-heading {
             font-family: var(--font-display);
-            font-size: clamp(2rem, 7vw, 3rem);
+            font-size: clamp(1.8rem, 6.5vw, 2.8rem);
             font-weight: 700;
             color: var(--sea);
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
-
         .amalfi-text {
             font-family: var(--font-body);
             font-size: clamp(0.85rem, 2.8vw, 1rem);
@@ -481,41 +393,40 @@
             color: var(--ink-soft);
             margin-bottom: 1.5rem;
         }
-
         .amalfi-cta {
             display: inline-block;
             background: var(--sea);
             color: var(--white);
             font-family: var(--font-body);
             font-weight: 600;
-            font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+            font-size: clamp(0.82rem, 2.5vw, 0.95rem);
             padding: 12px 28px;
             border-radius: 50px;
             letter-spacing: 0.02em;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.5rem;
         }
-
         .amalfi-note {
             font-family: var(--font-accent);
             font-style: italic;
             color: var(--sea);
             font-size: clamp(0.85rem, 2.5vw, 1rem);
+            margin-bottom: 2rem;
+        }
+        .amalfi-video-wrap {
+            width: 100%;
+            max-width: 420px;
+            margin: 1rem auto 0;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(27,75,107,0.12);
+            position: relative; z-index: 5;
+        }
+        .amalfi-video-wrap video {
+            width: 100%;
+            display: block;
         }
 
-        .amalfi-video {
-            position: absolute;
-            bottom: 3%;
-            right: 3%;
-            max-width: clamp(80px, 20vw, 220px);
-            z-index: 4;
-            transform: rotate(-2deg);
-            pointer-events: none;
-            opacity: 0.7;
-        }
-
-        /* ========================================
-           SECTION: RSVP
-           ======================================== */
+        /* ===== RSVP ===== */
         .rsvp-section {
             position: relative;
             padding: 3.5rem 1.5rem;
@@ -528,26 +439,19 @@
             background: var(--cream);
             overflow: hidden;
         }
-
         .rsvp-bg-terasa {
             position: absolute;
             top: 0; left: 0;
-            height: 100%;
-            width: 30%;
-            object-fit: cover;
-            z-index: 1;
-            opacity: 0.35;
-            mask-image: linear-gradient(to right, black 40%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to right, black 40%, transparent 100%);
+            height: 100%; width: 35%;
+            object-fit: cover; z-index: 1;
+            opacity: 0.25;
+            mask-image: linear-gradient(to right, black 30%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, black 30%, transparent 100%);
         }
-
         .rsvp-content {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 380px;
+            position: relative; z-index: 10;
+            width: 100%; max-width: 380px;
         }
-
         .rsvp-heading {
             font-family: var(--font-display);
             font-size: clamp(2rem, 7vw, 3.5rem);
@@ -555,14 +459,12 @@
             color: var(--sea);
             margin-bottom: 0.5rem;
         }
-
         .rsvp-deadline {
             font-family: var(--font-body);
             font-size: clamp(0.8rem, 2.5vw, 0.95rem);
             color: var(--ink-soft);
             margin-bottom: 0.3rem;
         }
-
         .rsvp-question {
             font-family: var(--font-accent);
             font-size: clamp(1.1rem, 3.5vw, 1.4rem);
@@ -570,8 +472,6 @@
             color: var(--terracotta);
             margin-bottom: 1.5rem;
         }
-
-        /* Primary CTA button */
         .btn-primary {
             display: inline-flex;
             align-items: center;
@@ -581,46 +481,37 @@
             font-family: var(--font-body);
             font-weight: 600;
             font-size: clamp(0.9rem, 2.8vw, 1.05rem);
-            padding: 14px 42px;
+            padding: 14px 44px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: transform 0.25s var(--ease-out), box-shadow 0.25s ease;
             -webkit-tap-highlight-color: transparent;
-            position: relative;
-            z-index: 10;
         }
-        .btn-primary:active {
-            transform: scale(0.97);
-        }
+        .btn-primary:active { transform: scale(0.97); }
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(27,75,107,0.25);
         }
-
-        /* RSVP Form */
         .rsvp-form {
             display: none;
             background: var(--white);
-            border: 1.5px solid rgba(27,75,107,0.12);
+            border: 1.5px solid rgba(27,75,107,0.1);
             border-radius: var(--radius);
             padding: 1.5rem;
             margin-top: 1.5rem;
             text-align: left;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
         }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
+        .form-group { margin-bottom: 1.1rem; }
         .form-group label {
             display: block;
-            font-size: 0.72rem;
+            font-size: 0.68rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             color: var(--sea);
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.35rem;
         }
         .form-group input[type="text"] {
             width: 100%;
@@ -635,58 +526,41 @@
             outline: none;
             -webkit-appearance: none;
         }
-        .form-group input[type="text"]:focus {
-            border-color: var(--sea);
-        }
-        .form-group input[type="text"]::placeholder {
-            color: #B0A898;
-        }
-
-        /* Checkbox */
+        .form-group input[type="text"]:focus { border-color: var(--sea); }
+        .form-group input[type="text"]::placeholder { color: #B0A898; }
         .checkbox-row {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 0;
         }
         .checkbox-row input[type="checkbox"] {
-            width: 20px; height: 20px;
+            width: 22px; height: 22px;
             accent-color: var(--sea);
             cursor: pointer;
             flex-shrink: 0;
         }
         .checkbox-row label {
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             font-weight: 500;
             color: var(--ink);
             cursor: pointer;
             margin-bottom: 0 !important;
         }
-
-        /* +1 additional fields */
         .plus-one-fields {
             display: none;
             margin-top: 1rem;
             padding-top: 1rem;
             border-top: 1px solid var(--sand);
         }
-        .plus-one-fields.active {
-            display: block;
-        }
-        .plus-one-label-note {
+        .plus-one-fields.active { display: block; }
+        .plus-one-note {
             font-family: var(--font-accent);
             font-style: italic;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             color: var(--ink-soft);
             margin-bottom: 0.8rem;
         }
-
-        .btn-submit {
-            width: 100%;
-            margin-top: 1.2rem;
-        }
-
-        /* Thank-you state */
+        .btn-submit { width: 100%; margin-top: 1.2rem; }
         .rsvp-thankyou {
             display: none;
             margin-top: 1.5rem;
@@ -694,9 +568,9 @@
         }
         .rsvp-thankyou h3 {
             font-family: var(--font-display);
-            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
             color: var(--sea);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
         .rsvp-thankyou p {
             font-family: var(--font-accent);
@@ -704,32 +578,15 @@
             color: var(--ink-soft);
             font-style: italic;
         }
-
-        .rsvp-decline {
-            display: none;
-            margin-top: 1.5rem;
-        }
-        .rsvp-decline p {
-            font-family: var(--font-display);
-            font-size: clamp(1.4rem, 5vw, 2rem);
-            color: var(--sea);
-        }
-
-        /* Lemon tree */
         .rsvp-lemon {
             position: absolute;
-            bottom: 2%;
-            right: 2%;
-            max-width: clamp(80px, 18vw, 200px);
+            bottom: 2%; right: 1%;
+            width: clamp(80px, 20vw, 180px);
             z-index: 3;
             transform: rotate(4deg);
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
-            opacity: 0.7;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.08));
+            opacity: 0.65;
         }
-
-        /* ========================================
-           FOOTER — MINIMAL
-           ======================================== */
         .footer {
             text-align: center;
             padding: 1.5rem;
@@ -737,84 +594,93 @@
             font-style: italic;
             font-size: 0.85rem;
             color: var(--ink-soft);
-            opacity: 0.6;
+            opacity: 0.5;
             background: var(--cream);
         }
 
-        /* ========================================
-           RESPONSIVE — LARGER SCREENS
-           ======================================== */
         @media (min-width: 768px) {
-            .hero { padding: 3rem 2rem; }
-            .hero-sun { width: 130px; height: 130px; }
-            .hero-drink { max-width: 180px; left: 12%; }
-            .hero-smile { max-width: 160px; right: 12%; }
-            .hero-karikatura { max-width: 420px; }
-
+            .hero { padding: 3.5rem 2rem 0; }
+            .hero-sun-wrap { width: 160px; height: 160px; }
+            .hero-drink { width: 150px; left: 10%; }
+            .hero-smile { width: 140px; right: 10%; }
+            .hero-karikatura { width: min(50vw, 420px); }
             .info-section { padding: 4rem 2rem; }
-            .info-card { padding: 2rem; }
-            .info-cocktails { max-width: 400px; }
-
+            .info-card { padding: 1.5rem 1.8rem; }
+            .info-cocktails { max-width: 380px; }
             .dress-section { padding: 4rem 2rem; }
-
+            .dress-poza { width: min(50vw, 380px); }
             .amalfi-section { padding: 4rem 2rem; }
-
+            .amalfi-video-wrap { max-width: 500px; }
             .rsvp-section { padding: 4rem 2rem; }
             .rsvp-form { padding: 2rem; }
         }
 
         @media (min-width: 1200px) {
-            .hero-sun { width: 150px; height: 150px; }
-            .hero-drink { max-width: 200px; }
-            .hero-smile { max-width: 180px; }
-            .hero-karikatura { max-width: 500px; }
-            .info-bg-right { opacity: 0.25; }
+            .hero-sun-wrap { width: 180px; height: 180px; }
+            .hero-karikatura { width: min(40vw, 480px); }
+            .hero-drink { width: 170px; }
+            .hero-smile { width: 160px; }
+            .info-bg-right { opacity: 0.15; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ==========================================
-         HERO — "Življenje je lepo"
-         ========================================== -->
     <section class="hero">
         <div class="hero-border"></div>
-
         <img src="https://blazeking13.github.io/party/drink3.png" alt="Limoncello drink" class="hero-drink" onerror="this.style.display='none'">
         <img src="https://blazeking13.github.io/party/image_2_transparent.png" alt="Smile" class="hero-smile" onerror="this.style.display='none'">
-
-        <div class="hero-sun"></div>
-
+        <div class="hero-sun-wrap">
+            <div class="sun-glow"></div>
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- 8 rays, rotating slowly -->
+                <g class="sun-rays">
+                    <polygon points="100,8 106,38 94,38" fill="#F5B731" opacity="0.7"/>
+                    <polygon points="165,35 143,58 135,50" fill="#F5B731" opacity="0.6"/>
+                    <polygon points="192,100 162,106 162,94" fill="#F5B731" opacity="0.7"/>
+                    <polygon points="165,165 143,143 150,135" fill="#F5B731" opacity="0.6"/>
+                    <polygon points="100,192 94,162 106,162" fill="#F5B731" opacity="0.7"/>
+                    <polygon points="35,165 57,143 65,150" fill="#F5B731" opacity="0.6"/>
+                    <polygon points="8,100 38,94 38,106" fill="#F5B731" opacity="0.7"/>
+                    <polygon points="35,35 57,57 50,65" fill="#F5B731" opacity="0.6"/>
+                </g>
+                <!-- Sun body -->
+                <defs>
+                    <radialGradient id="sunGrad" cx="45%" cy="42%" r="50%">
+                        <stop offset="0%" stop-color="#FFFDF0"/>
+                        <stop offset="25%" stop-color="#FDE68A"/>
+                        <stop offset="55%" stop-color="#F5B731"/>
+                        <stop offset="80%" stop-color="#E8941A" stop-opacity="0.8"/>
+                        <stop offset="100%" stop-color="#D4800F" stop-opacity="0.4"/>
+                    </radialGradient>
+                </defs>
+                <circle cx="100" cy="100" r="48" fill="url(#sunGrad)"/>
+                <!-- Highlight -->
+                <ellipse cx="88" cy="88" rx="18" ry="14" fill="white" opacity="0.35"/>
+            </svg>
+        </div>
         <h1 class="hero-title reveal">Življenje je lepo</h1>
-
-        <p class="hero-subtitle reveal reveal-delay-1">
+        <p class="hero-subtitle reveal reveal-d1">
             Eden jih je dopolnil lani, drugi jih bo dopolnil letos.<br>
             Skupaj pa jih bova dopolnila 33.
         </p>
-
-        <p class="hero-tagline reveal reveal-delay-2">
+        <p class="hero-tagline reveal reveal-d2">
             Praznujmo življenje, dobro družbo in nepozabne trenutke.
         </p>
-
-        <img src="https://blazeking13.github.io/party/karikatura_colored.png" alt="Karikatura" class="hero-karikatura" onerror="this.style.display='none'">
+        <div class="hero-karikatura-wrap">
+            <img src="https://blazeking13.github.io/party/karikatura_colored.png" alt="Karikatura" class="hero-karikatura" onerror="this.style.display='none'">
+        </div>
     </section>
 
-
-    <!-- ==========================================
-         KJE & KDAJ — Event Info
-         ========================================== -->
     <section class="info-section">
         <img src="https://blazeking13.github.io/party/image_3_transparent.png" alt="Levem Meja" class="info-bg-left" onerror="this.style.display='none'">
-        <img src="https://blazeking13.github.io/party/image_sailboats_scene.png" alt="Jadrnice" class="info-bg-right reveal" onerror="this.style.display='none'">
-
+        <img src="https://blazeking13.github.io/party/image_sailboats_scene.png" alt="Jadrnice" class="info-bg-right" onerror="this.style.display='none'">
         <div class="info-content">
             <p class="section-label reveal">Vabilo</p>
-
-            <h2 class="info-heading reveal reveal-delay-1">
+            <h2 class="info-heading reveal reveal-d1">
                 Lepo vabljeni<br>na najino skupno praznovanje!
             </h2>
-
-            <div class="info-card reveal reveal-delay-2">
+            <div class="info-card reveal reveal-d2">
                 <div class="info-row">
                     <span class="label">Lokacija</span>
                     <span class="value">NOE Wine & Bar Restaurant, Volčja Draga 34d</span>
@@ -828,77 +694,54 @@
                     <span class="value">ob 18h</span>
                 </div>
             </div>
-
-            <img src="https://blazeking13.github.io/party/image_cocktails.png" alt="Koktajli" class="info-cocktails reveal reveal-delay-3" onerror="this.style.display='none'">
+            <img src="https://blazeking13.github.io/party/image_cocktails.png" alt="Koktajli" class="info-cocktails reveal reveal-d3" onerror="this.style.display='none'">
         </div>
-
         <img src="https://blazeking13.github.io/party/beach_sign.png" alt="Beach sign" class="beach-sign-float reveal" onerror="this.style.display='none'">
     </section>
 
-
-    <!-- ==========================================
-         DRESS CODE
-         ========================================== -->
     <section class="dress-section">
         <img src="https://blazeking13.github.io/party/image_4_transparent.png" alt="Disko Krogla" class="dress-disko reveal" onerror="this.style.display='none'">
         <img src="https://blazeking13.github.io/party/poza_srcek.png" alt="Poza" class="dress-poza reveal" onerror="this.style.display='none'">
-
-        <div class="dress-content reveal">
+        <div class="dress-content reveal reveal-d1">
             <h2 class="dress-heading">Dress Code</h2>
             <p class="dress-desc">Sproščeno, casual, 50 odtenkov ;)</p>
-
             <div class="color-swatches">
-                <div class="swatch swatch-yellow">Rumena</div>
-                <div class="swatch swatch-blue">Modra</div>
-                <div class="swatch swatch-white">Bela</div>
+                <div class="swatch sw-yellow">Rumena</div>
+                <div class="swatch sw-blue">Modra</div>
+                <div class="swatch sw-white">Bela</div>
             </div>
         </div>
-
         <img src="https://blazeking13.github.io/party/fishes.png" alt="Ribice" class="dress-fishes reveal" onerror="this.style.display='none'">
         <img src="https://blazeking13.github.io/party/ladies.png" alt="Poletne dame" class="dress-ladies reveal" onerror="this.style.display='none'">
     </section>
 
-
-    <!-- ==========================================
-         AMALFI COAST — Gift section
-         ========================================== -->
     <section class="amalfi-section">
         <div class="amalfi-content">
             <img src="https://blazeking13.github.io/party/Amalfi_Coast.png" alt="Amalfi Coast zemljevid" class="amalfi-map reveal">
-
-            <h2 class="amalfi-heading reveal reveal-delay-1">Amalfi Coast</h2>
-
-            <p class="amalfi-text reveal reveal-delay-2">
+            <h2 class="amalfi-heading reveal reveal-d1">Amalfi Coast</h2>
+            <p class="amalfi-text reveal reveal-d2">
                 Zbirava prispevke za najin izlet čez Amalfi Coast v Italiji.
                 Ni si vam treba belit glave z darilom, prispevkov bova zelo zadovoljna :)
             </p>
-
-            <div class="reveal reveal-delay-3">
+            <div class="reveal reveal-d3">
                 <span class="amalfi-cta">+386 51 360 560</span>
                 <p class="amalfi-note">S pripisom "Amalfi coast"</p>
             </div>
         </div>
-
-        <video src="https://blazeking13.github.io/party/animacija.mp4" class="amalfi-video reveal" autoplay loop muted playsinline></video>
+        <div class="amalfi-video-wrap reveal reveal-d4">
+            <video src="https://blazeking13.github.io/party/animacija.mp4" autoplay loop muted playsinline></video>
+        </div>
     </section>
 
-
-    <!-- ==========================================
-         RSVP
-         ========================================== -->
     <section class="rsvp-section">
         <img src="https://blazeking13.github.io/party/terasa.jpg" alt="Terasa" class="rsvp-bg-terasa" onerror="this.style.display='none'">
-
         <div class="rsvp-content">
             <h2 class="rsvp-heading reveal">Tvoja prisotnost</h2>
-            <p class="rsvp-deadline reveal reveal-delay-1">Prosim za potrditev udeležbe, najkasneje do 31. 7. 2026.</p>
-            <p class="rsvp-question reveal reveal-delay-2">Prideš?</p>
-
-            <div id="rsvp-buttons" class="reveal reveal-delay-3">
+            <p class="rsvp-deadline reveal reveal-d1">Prosim za potrditev udeležbe, najkasneje do 31. 7. 2026.</p>
+            <p class="rsvp-question reveal reveal-d2">Prideš?</p>
+            <div id="rsvp-buttons" class="reveal reveal-d3">
                 <button class="btn-primary" onclick="showForm()">Pridem!</button>
             </div>
-
-            <!-- Form -->
             <div class="rsvp-form" id="rsvp-form">
                 <div class="form-group">
                     <label for="ime">Ime</label>
@@ -914,10 +757,8 @@
                         <label for="plus-ena">Pridem s +1</label>
                     </div>
                 </div>
-
-                <!-- +1 fields -->
                 <div class="plus-one-fields" id="plus-one-fields">
-                    <p class="plus-one-label-note">Podatki spremljevalca</p>
+                    <p class="plus-one-note">Podatki spremljevalca</p>
                     <div class="form-group">
                         <label for="plus-ime">Ime</label>
                         <input type="text" id="plus-ime" placeholder="Ime spremljevalca">
@@ -927,53 +768,32 @@
                         <input type="text" id="plus-priimek" placeholder="Priimek spremljevalca">
                     </div>
                 </div>
-
                 <button class="btn-primary btn-submit" onclick="submitForm()">Potrdi prihod</button>
             </div>
-
-            <!-- Thank you -->
             <div class="rsvp-thankyou" id="rsvp-thankyou"></div>
-
-            <!-- Decline -->
-            <div class="rsvp-decline" id="rsvp-decline">
-                <p>Škoda. Pa naslednjič :)</p>
-            </div>
         </div>
-
         <img src="https://blazeking13.github.io/party/lemon_tree.png" alt="Limonovo drevo" class="rsvp-lemon reveal" onerror="this.style.display='none'">
     </section>
 
     <footer class="footer">La Vita è Bella · 2026</footer>
 
-
-    <!-- ==========================================
-         SCRIPTS
-         ========================================== -->
     <script>
-        /* --- Scroll Reveal --- */
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
-        }, { threshold: 0.12 });
+        }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        /* --- RSVP Logic --- */
-        const buttonsEl   = document.getElementById('rsvp-buttons');
-        const formEl      = document.getElementById('rsvp-form');
-        const thankyouEl  = document.getElementById('rsvp-thankyou');
-        const declineEl   = document.getElementById('rsvp-decline');
-        const plusFields   = document.getElementById('plus-one-fields');
+        const buttonsEl  = document.getElementById('rsvp-buttons');
+        const formEl     = document.getElementById('rsvp-form');
+        const thankyouEl = document.getElementById('rsvp-thankyou');
+        const plusFields  = document.getElementById('plus-one-fields');
 
         function showForm() {
             buttonsEl.style.display = 'none';
             formEl.style.display = 'block';
-            declineEl.style.display = 'none';
-            setTimeout(() => {
-                formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
+            setTimeout(() => formEl.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
         }
 
         function togglePlusOne() {
@@ -988,41 +808,23 @@
         function submitForm() {
             const ime     = document.getElementById('ime').value.trim();
             const priimek = document.getElementById('priimek').value.trim();
-
-            if (!ime) {
-                alert('Prosim, vpiši vsaj svoje ime.');
-                return;
-            }
-
+            if (!ime) { alert('Prosim, vpiši vsaj svoje ime.'); return; }
             const plusChecked = document.getElementById('plus-ena').checked;
             if (plusChecked) {
                 const plusIme = document.getElementById('plus-ime').value.trim();
-                if (!plusIme) {
-                    alert('Prosim, vpiši ime spremljevalca.');
-                    return;
-                }
+                if (!plusIme) { alert('Prosim, vpiši ime spremljevalca.'); return; }
             }
-
-            // Gather data for future Google Sheets integration
             const data = {
-                ime: ime,
-                priimek: priimek,
-                plusOne: plusChecked,
+                ime, priimek, plusOne: plusChecked,
                 plusIme: plusChecked ? document.getElementById('plus-ime').value.trim() : '',
                 plusPriimek: plusChecked ? document.getElementById('plus-priimek').value.trim() : ''
             };
             console.log('RSVP Data:', data);
-
-            // Show thank you
             formEl.style.display = 'none';
             thankyouEl.style.display = 'block';
-            thankyouEl.innerHTML = `
-                <h3>Hvala, ${ime}!</h3>
-                <p>Tvoja prijava je zabeležena. Se vidimo! 🥂</p>
-            `;
+            thankyouEl.innerHTML = `<h3>Hvala, ${ime}!</h3><p>Tvoja prijava je zabeležena. Se vidimo!</p>`;
             thankyouEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     </script>
-
 </body>
 </html>
