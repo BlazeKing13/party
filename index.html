@@ -197,13 +197,13 @@
             position: absolute; top: 0; left: 0;
             height: 100%; width: auto; max-width: 30%;
             object-fit: cover; object-position: left center;
-            opacity: 0.1; z-index: 1;
+            opacity: 0.2; z-index: 1;
         }
         .info-bg-right {
             position: absolute; top: 0; right: 0;
             height: 100%; width: auto; max-width: 40%;
             object-fit: cover; object-position: right center;
-            opacity: 0.08; z-index: 1;
+            opacity: 0.15; z-index: 1;
         }
         .info-content {
             position: relative; z-index: 5;
@@ -269,11 +269,12 @@
         }
         .beach-sign-float {
             position: absolute;
-            bottom: 2%; left: 20%;
-            width: clamp(55px, 14vw, 140px);
-            z-index: 6;
+            bottom: -3%;
+            right: 8%;
+            width: clamp(80px, 22vw, 200px);
+            z-index: 15;
             transform: rotate(-5deg);
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
         }
 
         /* ===== DRESS CODE ===== */
@@ -414,11 +415,8 @@
         }
         .amalfi-video-wrap {
             width: 100%;
-            max-width: 420px;
-            margin: 1rem auto 0;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(27,75,107,0.12);
+            max-width: 500px;
+            margin: 1.5rem auto 0;
             position: relative; z-index: 5;
         }
         .amalfi-video-wrap video {
@@ -610,7 +608,7 @@
             .dress-section { padding: 4rem 2rem; }
             .dress-poza { width: min(50vw, 380px); }
             .amalfi-section { padding: 4rem 2rem; }
-            .amalfi-video-wrap { max-width: 500px; }
+            .amalfi-video-wrap { max-width: 600px; }
             .rsvp-section { padding: 4rem 2rem; }
             .rsvp-form { padding: 2rem; }
         }
@@ -620,7 +618,7 @@
             .hero-karikatura { width: min(40vw, 480px); }
             .hero-drink { width: 170px; }
             .hero-smile { width: 160px; }
-            .info-bg-right { opacity: 0.15; }
+            .info-bg-right { opacity: 0.22; }
         }
     </style>
 </head>
@@ -662,7 +660,8 @@
         <h1 class="hero-title reveal">Življenje je lepo</h1>
         <p class="hero-subtitle reveal reveal-d1">
             Eden jih je dopolnil lani, drugi jih bo dopolnil letos.<br>
-            Skupaj pa jih bova dopolnila 33.
+            Skupaj pa jih bova dopolnila 33.<br>
+            <strong style="font-style: normal; color: var(--sea); font-weight: 600;">Oba sva ZA</strong>
         </p>
         <p class="hero-tagline reveal reveal-d2">
             Praznujmo življenje, dobro družbo in nepozabne trenutke.
@@ -734,7 +733,7 @@
     </section>
 
     <section class="rsvp-section">
-        <img src="https://blazeking13.github.io/party/terasa.jpg" alt="Terasa" class="rsvp-bg-terasa" onerror="this.style.display='none'">
+        <img src="https://blazeking13.github.io/party/terasa.png" alt="Terasa" class="rsvp-bg-terasa" onerror="this.style.display='none'">
         <div class="rsvp-content">
             <h2 class="rsvp-heading reveal">Tvoja prisotnost</h2>
             <p class="rsvp-deadline reveal reveal-d1">Prosim za potrditev udeležbe, najkasneje do 31. 7. 2026.</p>
