@@ -727,7 +727,7 @@
                 Ni si vam treba belit glave z darilom, prispevkov bova zelo zadovoljna :)
             </p>
             <div class="reveal reveal-d3">
-                <span class="amalfi-cta">Fliknite na +386 41 560 360</span>
+                <span class="amalfi-cta">Fliknite na +386 51 360 560</span>
                 <p class="amalfi-note">S pripisom "Amalfi coast"</p>
             </div>
         </div>
@@ -793,6 +793,15 @@
         const thankyouEl = document.getElementById('rsvp-thankyou');
         const plusFields  = document.getElementById('plus-one-fields');
 
+        // Preveri ob nalaganju ali je oseba že prijavljena
+        const obstojecaPrijava = localStorage.getItem('rsvp_prijavljen');
+        if (obstojecaPrijava) {
+            const shranjeno = JSON.parse(obstojecaPrijava);
+            buttonsEl.style.display = 'none';
+            thankyouEl.style.display = 'block';
+            thankyouEl.innerHTML = `<h3>Živjo, ${shranjeno.ime}!</h3><p>Tvoja prijava je že zabeležena. Se vidimo!</p>`;
+        }
+
         function showForm() {
             buttonsEl.style.display = 'none';
             formEl.style.display = 'block';
@@ -809,7 +818,7 @@
         }
 
         // ↓ Sem prilepi tvoj Google Apps Script URL
-        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxFWsjdCYbfRxNgQJFUPYySi_w7_1ocFy1MSi4m8UCCyKE79vKjx6uIlhYtYF-XdMXC/exec';
+        const SHEET_URL = 'TVOJ_APPS_SCRIPT_URL_TUKAJ';
 
         async function submitForm() {
             const ime       = document.getElementById('ime').value.trim();
@@ -852,6 +861,8 @@
         }
 
         function showThankyou(ime) {
+            // Shrani v localStorage da preprečimo dvojno prijavo
+            localStorage.setItem('rsvp_prijavljen', JSON.stringify({ ime }));
             formEl.style.display = 'none';
             thankyouEl.style.display = 'block';
             thankyouEl.innerHTML = `<h3>Hvala, ${ime}!</h3><p>Tvoja prijava je zabeležena. Se vidimo!</p>`;
